@@ -1,0 +1,38 @@
+name: Deploy Cloud Run Job
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Set up gcloud
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+
+    - name: Configure Docker for Artifact Registry
+      run: gcloud auth configure-docker "${{ secrets.GCP_REGION }}-docker.pkg.dev"
+
+    - name: Build and push Docker image
+      run: |
+        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/materialized-refresh-job"
+        docker build -t "$IMAGE:latest" .
+        docker push "$IMAGE:latest"
+
+    - name: Deploy Cloud Run Job
+      run: |
+        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/materialized-refresh-job:latest"
+        gcloud run jobs deploy materialized-refresh-job \
+          --image "$IMAGE" \
+          --region "${{ secrets.GCP_REGION }}" \
+          --set-env-vars DB_HOST=${{ secrets.DB_HOST }},DB_NAME=${{ secrets.DB_NAME }},DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          --execute-now

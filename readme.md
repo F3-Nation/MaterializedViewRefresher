@@ -47,4 +47,3 @@ VALUES
     ('user_activity_rollup', '1,13'),      -- refresh at 1am and 1pm UTC
     ('hourly_metrics', '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23'); -- every hour
 ```
-# MaterializedViewRefresher
