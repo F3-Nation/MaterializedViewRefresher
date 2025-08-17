@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Logs
+*.log
+*.out
+*.err
+
+# Byte-compiled / cache
+*.pyc
+*.pkl
+*.pickle
+
+# Jupyter
+.ipynb_checkpoints
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+*.tar
+docker-compose.override.yml
+
+# Security (don’t commit keys!)
+*.key
+*.pem
+*.crt
+*.cert
+*.json
+
+# GitHub Actions (cache, temp)
+.github/workflows/*.tmp
