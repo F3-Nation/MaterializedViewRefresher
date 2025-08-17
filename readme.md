@@ -28,7 +28,7 @@ If found, it uses the table’s configuration to decide which materialized views
 - The hours column must contain UTC hours (not local time).
 - If a view should refresh every hour, you can either list all 24 hours or just automate in your schema setup.
 - The job assumes the name matches exactly the materialized view in that schema.
-- The role `app_materializedviewrefresher` must must have USAGE on your schema and SELECT on the `materializedview` table.
+- The role `app_materializedviewrefresher` must must have USAGE on your schema and SELECT on the `materializedview` table, and be OWNER of that table.
 
 ## Creating the Table
 ```sql
