@@ -22,22 +22,23 @@ jobs:
     - name: Set up gcloud
       uses: google-github-actions/setup-gcloud@v2
       with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        project_id: f3data
 
     - name: Configure Docker for Artifact Registry
-      run: gcloud auth configure-docker "${{ secrets.GCP_REGION }}-docker.pkg.dev"
+      run: gcloud auth configure-docker "us-central1-docker.pkg.dev"
 
     - name: Build and push Docker image
       run: |
-        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/materialized-view-refresher/materialized-refresh-job"
+        IMAGE="us-central1-docker.pkg.dev/f3data/materialized-view-refresher/materialized-refresh-job"
         docker build -t "$IMAGE:latest" .
         docker push "$IMAGE:latest"
 
     - name: Deploy Cloud Run Job
       run: |
-        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/materialized-view-refresher/materialized-refresh-job:latest"
+        IMAGE="us-central1-docker.pkg.dev/f3data/materialized-view-refresher/materialized-refresh-job:latest"
         gcloud run jobs deploy materialized-refresh-job \
           --image "$IMAGE" \
-          --region "${{ secrets.GCP_REGION }}" \
-          --set-env-vars DB_HOST=${{ secrets.DB_HOST }},DB_NAME=${{ secrets.DB_NAME }},DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          --region "us-central1" \
+          --set-env-vars DB_HOST=35.239.19.124,DB_NAME=f3_prod,DB_USER=app_materializedviewrefresher \
+          --set-secrets DB_PASSWORD=app_materializedviewrefresher:latest \
           --execute-now
