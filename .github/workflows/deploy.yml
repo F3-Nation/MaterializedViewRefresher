@@ -29,13 +29,13 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/materialized-refresh-job"
+        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/materialized-view-refresher/materialized-refresh-job"
         docker build -t "$IMAGE:latest" .
         docker push "$IMAGE:latest"
 
     - name: Deploy Cloud Run Job
       run: |
-        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/materialized-refresh-job:latest"
+        IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/materialized-view-refresher/materialized-refresh-job:latest"
         gcloud run jobs deploy materialized-refresh-job \
           --image "$IMAGE" \
           --region "${{ secrets.GCP_REGION }}" \
